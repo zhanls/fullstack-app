@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
+// api service
 import noteService from './services/notes'
+import loginService from './services/login'
 import Notification from './components/Notification'
 import * as serviceWorker from './serviceWorker'
 
@@ -9,6 +11,9 @@ const App = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
   const [errMsg, setErrMsg] = useState(null)
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [user, setUser] = useState(null)
   // const [showAll, setShowAll] = useState(true)
   // 默认设定每次渲染完成都会调用，第二个参数传[]表示只执行一次
   useEffect(() => {
@@ -17,6 +22,23 @@ const App = () => {
         setNotes(initialNotes)
       })
   }, [])
+
+  const handleLogin = e => {
+    e.preventDefault()
+    console.log('logging in with', username, password)
+    loginService.login({ username, password })
+      .then(returnedData => {
+        setUser(returnedData)
+        setUsername('')
+        setPassword('')
+      })
+      .catch(err => {
+        setErrMsg('Wrong Credentials')
+        setTimeout(() => {
+          setErrMsg(null)
+        }, 3000)
+      })
+  }
 
   const toggleImportanceOf = id => {
     const note = notes.find(n => n.id === id)
@@ -57,10 +79,53 @@ const App = () => {
       })
   }
 
+  const loginForm = () => (
+    <form onSubmit={handleLogin}>
+      <label>
+        username
+          <input
+          type="text"
+          value={username}
+          name="Username"
+          onChange={({ target }) => setUsername(target.value)}
+        />
+      </label>
+      <label>
+        password
+          <input
+          type="password"
+          value={password}
+          name="Password"
+          onChange={({ target }) => setPassword(target.value)}
+        />
+      </label>
+      <button type="submit">login</button>
+    </form>
+  )
+
+  const noteForm = () => (
+    <form onSubmit={addNote}>
+      <input type="text" value={newNote} onChange={e => setNewNote(e.target.value)}></input>
+      <button type="submit">save</button>
+    </form>
+  )
+
   return (
     <div>
       <h1>Notes</h1>
+      
       <Notification message={errMsg}/>
+
+      <h2>Login</h2>
+
+      {user === null ?
+        loginForm() :
+        <div>
+          <p>{user.name} logged in</p>
+          {noteForm()}
+        </div>
+      }
+
       <ul>
         {notes.map(
           v => 
@@ -71,10 +136,6 @@ const App = () => {
             </li>
         )}
       </ul>
-      <form onSubmit={addNote}>
-        <input type="text" value={newNote} onChange={e => setNewNote(e.target.value)}></input>
-        <button type="submit">add</button>
-      </form>
     </div>
   )
 }
