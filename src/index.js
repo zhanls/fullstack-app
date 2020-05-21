@@ -5,6 +5,7 @@ import './index.css'
 import noteService from './services/notes'
 import loginService from './services/login'
 import Notification from './components/Notification'
+import Toggle from './components/Toggle'
 import * as serviceWorker from './serviceWorker'
 
 const App = () => {
@@ -113,6 +114,14 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
+      <Toggle>
+        {({ on, toggle }) => (
+          <div>
+            {on && <nav>Nav</nav>}
+            <button onClick={toggle}>click me</button>
+          </div>
+        )}
+      </Toggle>
       
       <Notification message={errMsg}/>
 
