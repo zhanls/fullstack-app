@@ -29,6 +29,7 @@ const App = () => {
     console.log('logging in with', username, password)
     loginService.login({ username, password })
       .then(returnedData => {
+        noteService.setToken(returnedData.token)
         setUser(returnedData)
         setUsername('')
         setPassword('')
@@ -124,8 +125,6 @@ const App = () => {
       </Toggle>
       
       <Notification message={errMsg}/>
-
-      <h2>Login</h2>
 
       {user === null ?
         loginForm() :
