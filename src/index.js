@@ -5,10 +5,12 @@ import './index.css'
 import noteService from './services/notes'
 import loginService from './services/login'
 import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
 import Toggle from './components/Toggle'
 import * as serviceWorker from './serviceWorker'
 
 const App = () => {
+  const [loginVisible, setLoginVisible] = useState(false)
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
   const [errMsg, setErrMsg] = useState(null)
@@ -81,29 +83,28 @@ const App = () => {
       })
   }
 
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <label>
-        username
-          <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </label>
-      <label>
-        password
-          <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </label>
-      <button type="submit">login</button>
-    </form>
-  )
+  const loginForm = () => {
+    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+    const showWhenVisible = { display: loginVisible ? '' : 'none' }
+
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setLoginVisible(true)}>log in</button>
+        </div>
+        <div style={showWhenVisible}>
+          <LoginForm
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleSubmit={handleLogin}
+          />
+          <button onClick={() => setLoginVisible(false)}>cancel</button>
+        </div>
+      </div>
+    )
+  }
 
   const noteForm = () => (
     <form onSubmit={addNote}>
@@ -115,22 +116,21 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
-      <Toggle>
-        {({ on, toggle }) => (
-          <div>
-            {on && <nav>Nav</nav>}
-            <button onClick={toggle}>click me</button>
-          </div>
-        )}
-      </Toggle>
       
       <Notification message={errMsg}/>
 
       {user === null ?
-        loginForm() :
+        <Toggle>
+          {({ on, toggle }) => (
+            <div>
+              <button onClick={toggle}>{on ? '隐藏登录表单' : '显示登录表单'}</button>
+              {on && loginForm()}
+            </div>
+          )}
+        </Toggle>
+        :
         <div>
           <p>{user.name} logged in</p>
-          {noteForm()}
         </div>
       }
 
@@ -144,6 +144,10 @@ const App = () => {
             </li>
         )}
       </ul>
+
+      {user !== null &&
+        noteForm()
+      }
     </div>
   )
 }
