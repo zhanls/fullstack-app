@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import {
   BrowserRouter as Router,
@@ -8,23 +8,49 @@ import './index.css'
 // views
 import Home from './views/Home'
 import Notes from './views/Notes'
-import Users from './views/Users'
+import Login from './views/Login'
 import NotFound from './views/NotFound'
+// services
+import noteService from './services/notes'
 // PWA
 import * as serviceWorker from './serviceWorker'
 
 const App = () => {
+  const [user, setUser] = useState(null) 
+  // 查询本地存储用户信息，若有，则直接登录
+  useEffect(() => {
+    const loggedUser = window.localStorage.getItem('loggedUser')
+    if (loggedUser) {
+      const user = JSON.parse(loggedUser)
+      setUser(user)
+      noteService.setToken(user.token)
+    }
+  }, [])
+
+  const login = () => {
+    setUser(user)
+  }
+
+  const logout = () => {
+    window.localStorage.removeItem('loggedUser')
+    setUser(null)
+  }
+
   return (
     <Router>
       <div className="menu">
         <Link to="/">home</Link>
         <Link to="/notes">notes</Link>
-        <Link to="/users">users</Link>
+        {/* <Link to="/users">users</Link> */}
+        {user
+          ? <em>{user} logged in, <span onClick={logout}>logout</span></em>
+          : <Link to="/login">login</Link>
+        }
       </div>
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/notes" component={Notes} />
-        <Route path="/users" component={Users} />
+        <Route path="/login" component={Login} onLogin={login}/>
         <Route component={NotFound} />
       </Switch>
     </Router>

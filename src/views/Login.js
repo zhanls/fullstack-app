@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import loginService from '../services/login'
+import noteService from '../services/notes'
 
-const Users = () => {
+const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -10,8 +11,10 @@ const Users = () => {
     e.preventDefault()
     console.log('logging in with', username, password)
     loginService.login({ username, password })
-      .then(returnedData => {
-        setUser(returnedData)
+      .then(data => {
+        window.localStorage.setItem('loggedUser', JSON.stringify(data))
+        noteService.setToken(data.token)
+        setUser(data)
         setUsername('')
         setPassword('')
       })
@@ -65,4 +68,4 @@ const Users = () => {
   )
 }
 
-export default Users
+export default Login
