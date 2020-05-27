@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useHistory } from "react-router-dom"
 import loginService from '../services/login'
 import noteService from '../services/notes'
 
@@ -6,6 +7,7 @@ const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const history = useHistory()
 
   const handleLogin = e => {
     e.preventDefault()
@@ -17,6 +19,7 @@ const Login = () => {
         setUser(data)
         setUsername('')
         setPassword('')
+        history.push('/')
       })
       .catch(err => {
         // setErrMsg('Wrong Credentials')

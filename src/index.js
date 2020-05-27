@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import {
   BrowserRouter as Router,
-  Switch, Route, Link
+  Switch, Route, Link, Redirect
 } from "react-router-dom"
 import './index.css'
 // views
@@ -27,10 +27,6 @@ const App = () => {
     }
   }, [])
 
-  const login = () => {
-    setUser(user)
-  }
-
   const logout = () => {
     window.localStorage.removeItem('loggedUser')
     setUser(null)
@@ -50,7 +46,8 @@ const App = () => {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/notes" component={Notes} />
-        <Route path="/login" component={Login} onLogin={login}/>
+        <Route path="/login" render={() =>
+          user ? <Redirect to="/" /> : <Login />}/>
         <Route component={NotFound} />
       </Switch>
     </Router>
