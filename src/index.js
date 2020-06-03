@@ -4,6 +4,9 @@ import {
   BrowserRouter as Router,
   Switch, Route, Link, Redirect
 } from "react-router-dom"
+import { Row, Col, Menu } from 'antd'
+import { HomeFilled, BankFilled } from '@ant-design/icons'
+import 'antd/dist/antd.css'
 import './index.css'
 // views
 import Home from './views/Home'
@@ -34,22 +37,42 @@ const App = () => {
 
   return (
     <Router>
-      <div className="menu">
-        <Link to="/">home</Link>
-        <Link to="/notes">notes</Link>
+      <header id="header">
+        <Row>
+          <Col span={4}>
+            <h1>
+              <a id="logo" href="/">
+                <img src="https://static.oschina.net/new-osc/img/logo_new.svg" alt="logo" />
+                NoteApp
+              </a>
+            </h1>
+          </Col>
+          <Col span={20}>
+            <Menu mode="horizontal">
+              <Menu.Item icon={<HomeFilled />}>
+                <Link to="/">home</Link>
+              </Menu.Item>
+              <Menu.Item icon={<BankFilled />}>
+                <Link to="/notes">notes</Link>
+              </Menu.Item>
+            </Menu>
+            {user
+              ? <em>{user} logged in, <span onClick={logout}>logout</span></em>
+              : <Link to="/login">login</Link>
+            }
+          </Col>
+        </Row>
         {/* <Link to="/users">users</Link> */}
-        {user
-          ? <em>{user} logged in, <span onClick={logout}>logout</span></em>
-          : <Link to="/login">login</Link>
-        }
-      </div>
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path="/notes" component={Notes} />
-        <Route path="/login" render={() =>
-          user ? <Redirect to="/" /> : <Login />}/>
-        <Route component={NotFound} />
-      </Switch>
+      </header>
+      <main id="main">
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/notes" component={Notes} />
+          <Route path="/login" render={() =>
+            user ? <Redirect to="/" /> : <Login />}/>
+          <Route component={NotFound} />
+        </Switch>
+      </main>
     </Router>
   )
 }
