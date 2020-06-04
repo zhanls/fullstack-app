@@ -1,9 +1,30 @@
-.note {
-  color: grey;
-  padding-top: 5px;
-  font-size: 15px;
+@import '../node_modules/antd/dist/antd.css';
+
+.header {
+  position: fixed;
+  top: 0;
+  width: 100%;
 }
 
-.menu a {
-  padding: 5px;
+.logo {
+  font-size: 1.5em;
+  line-height: 40px;
+  color: #273849;
+  font-family: "Dosis", "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+  width: 120px;
+  height: 31px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px 28px 16px 0;
+  float: left;
 }
+
+.logo img {
+  vertical-align: middle;
+  margin-right: 6px;
+  width: 40px;
+  height: 40px;
+}
+
+/* .site-layout .site-layout-background {
+  background: #fff;
+} */

@@ -1,90 +1,203 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
+import { Layout, Menu, Breadcrumb } from 'antd'
 import {
-  BrowserRouter as Router,
-  Switch, Route, Link, Redirect
-} from "react-router-dom"
-import { Row, Col, Menu } from 'antd'
-import { HomeFilled, BankFilled } from '@ant-design/icons'
-import 'antd/dist/antd.css'
+  AppstoreOutlined,
+  BarChartOutlined,
+  CloudOutlined,
+  ShopOutlined,
+  TeamOutlined,
+  UserOutlined,
+  UploadOutlined,
+  VideoCameraOutlined,
+} from '@ant-design/icons';
+
 import './index.css'
-// views
-import Home from './views/Home'
-import Notes from './views/Notes'
-import Login from './views/Login'
-import NotFound from './views/NotFound'
-// services
-import noteService from './services/notes'
-// PWA
-import * as serviceWorker from './serviceWorker'
 
-const App = () => {
-  const [user, setUser] = useState(null) 
-  // 查询本地存储用户信息，若有，则直接登录
-  useEffect(() => {
-    const loggedUser = window.localStorage.getItem('loggedUser')
-    if (loggedUser) {
-      const user = JSON.parse(loggedUser)
-      setUser(user)
-      noteService.setToken(user.token)
-    }
-  }, [])
+const { Header, Sider, Content } = Layout;
 
-  const logout = () => {
-    window.localStorage.removeItem('loggedUser')
-    setUser(null)
+class SiderDemo extends React.Component {
+  state = {
+    collapsed: false,
+  };
+
+  onCollapse = collapsed => {
+    console.log(collapsed);
+    this.setState({ collapsed });
+  };
+
+  render() {
+    return (
+      <Layout hasSider>
+        <Header className="header">
+          <div className="logo">
+            <img src="https://vuejs.org/images/logo.png" alt="vue logo"/>
+            <span>Vue.js</span>
+          </div>
+          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+            <Menu.Item key="1">nav 1</Menu.Item>
+            <Menu.Item key="2">nav 2</Menu.Item>
+            <Menu.Item key="3">nav 3</Menu.Item>
+          </Menu>
+        </Header>
+        <Sider
+          theme="light"
+          collapsible
+          collapsed={this.state.collapsed}
+          onCollapse={this.onCollapse}
+          style={{
+            overflow: 'auto',
+            height: '100vh',
+            position: 'fixed',
+            left: 0,
+            top: 64
+          }}
+        >
+          <Menu mode="inline" defaultSelectedKeys={['4']}>
+            <Menu.Item key="1" icon={<UserOutlined />}>
+              nav 1
+            </Menu.Item>
+            <Menu.Item key="2" icon={<VideoCameraOutlined />}>
+              nav 2
+            </Menu.Item>
+            <Menu.Item key="3" icon={<UploadOutlined />}>
+              nav 3
+            </Menu.Item>
+            <Menu.Item key="4" icon={<BarChartOutlined />}>
+              nav 4
+            </Menu.Item>
+            <Menu.Item key="5" icon={<CloudOutlined />}>
+              nav 5
+            </Menu.Item>
+            <Menu.Item key="6" icon={<AppstoreOutlined />}>
+              nav 6
+            </Menu.Item>
+            <Menu.Item key="7" icon={<TeamOutlined />}>
+              nav 7
+            </Menu.Item>
+            <Menu.Item key="8" icon={<ShopOutlined />}>
+              nav 8
+            </Menu.Item>
+          </Menu>
+        </Sider>
+        <Layout className="site-layout" style={{ padding: '64px 0 0 200px' }}>
+          <Breadcrumb style={{ margin: '16px 0' }}>
+            <Breadcrumb.Item>Home</Breadcrumb.Item>
+            <Breadcrumb.Item>List</Breadcrumb.Item>
+            <Breadcrumb.Item>App</Breadcrumb.Item>
+          </Breadcrumb>
+          <Content
+            className="site-layout-background"
+            style={{
+              padding: 24,
+              margin: 0,
+              minHeight: 280,
+              backgroundColor: 'white'
+            }}
+          >
+            <div className="site-layout-background" style={{ padding: 24, textAlign: 'center' }}>
+              ...
+              <br />
+              Really
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              long
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              ...
+              <br />
+              content
+            </div>
+          </Content>
+        </Layout>
+      </Layout>
+    );
   }
-
-  return (
-    <Router>
-      <header id="header">
-        <Row>
-          <Col span={4}>
-            <h1>
-              <a id="logo" href="/">
-                <img src="https://static.oschina.net/new-osc/img/logo_new.svg" alt="logo" />
-                NoteApp
-              </a>
-            </h1>
-          </Col>
-          <Col span={20}>
-            <Menu mode="horizontal">
-              <Menu.Item icon={<HomeFilled />}>
-                <Link to="/">home</Link>
-              </Menu.Item>
-              <Menu.Item icon={<BankFilled />}>
-                <Link to="/notes">notes</Link>
-              </Menu.Item>
-            </Menu>
-            {user
-              ? <em>{user} logged in, <span onClick={logout}>logout</span></em>
-              : <Link to="/login">login</Link>
-            }
-          </Col>
-        </Row>
-        {/* <Link to="/users">users</Link> */}
-      </header>
-      <main id="main">
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/notes" component={Notes} />
-          <Route path="/login" render={() =>
-            user ? <Redirect to="/" /> : <Login />}/>
-          <Route component={NotFound} />
-        </Switch>
-      </main>
-    </Router>
-  )
 }
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const mountNode = document.getElementById('root')
+ReactDOM.render(<SiderDemo />, mountNode);
