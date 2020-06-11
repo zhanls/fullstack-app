@@ -1,98 +1,115 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Layout, Menu, Breadcrumb } from 'antd'
 import {
-  AppstoreOutlined,
-  BarChartOutlined,
-  CloudOutlined,
-  ShopOutlined,
-  TeamOutlined,
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useLocation
+} from "react-router-dom"
+import { Layout, Menu } from 'antd'
+import {
   UserOutlined,
-  UploadOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons';
+
+// views
+import Pictures from './views/Pictures'
+import NotFound from './views/NotFound'
 
 import './index.css'
 
 const { Header, Sider, Content } = Layout;
 
-class SiderDemo extends React.Component {
-  render() {
-    return (
-      <Layout hasSider>
-        <Header className="header">
-          <div className="logo">
-            <img src="https://vuejs.org/images/logo.png" alt="vue logo"/>
-            <span>Vue.js</span>
-          </div>
-          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-            <Menu.Item key="1">nav 1</Menu.Item>
-            <Menu.Item key="2">nav 2</Menu.Item>
-            <Menu.Item key="3">nav 3</Menu.Item>
-          </Menu>
-        </Header>
-        <Sider
-          theme="light"
+const routes = [
+  {
+    path: '/',
+    exact: true,
+    main: () => <div>Home</div>
+  },
+  {
+    path: '/pictures',
+    main: () => <Pictures />
+  },
+  {
+    path: '*',
+    main: () => <NotFound />
+  }
+]
+
+const App = () => {
+  let location = useLocation()
+  console.log(location)
+  return (
+    <Layout hasSider>
+      <Header className="header">
+        <div className="logo">
+          <img src="https://vuejs.org/images/logo.png" alt="vue logo"/>
+          <span>Vue.js</span>
+        </div>
+        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+          <Menu.Item key="1">nav 1</Menu.Item>
+          <Menu.Item key="2">nav 2</Menu.Item>
+          <Menu.Item key="3">nav 3</Menu.Item>
+        </Menu>
+      </Header>
+      <Sider
+        theme="light"
+        style={{
+          overflow: 'auto',
+          height: '100vh',
+          position: 'fixed',
+          left: 0,
+          top: 64
+        }}
+      >
+        <Menu mode="inline" defaultSelectedKeys={[location.pathname]}>
+          <Menu.Item key="/" icon={<UserOutlined />}>
+            <Link to="/">Home</Link>
+          </Menu.Item>
+          <Menu.Item key="/pictures" icon={<VideoCameraOutlined />}>
+            <Link to="/pictures">Pictures</Link>
+          </Menu.Item>
+        </Menu>
+      </Sider>
+      <Layout className="site-layout" style={{ padding: '64px 0 0 200px' }}>
+        <Content
+          className="site-layout-background"
           style={{
-            overflow: 'auto',
-            height: '100vh',
-            position: 'fixed',
-            left: 0,
-            top: 64
+            padding: 24,
+            margin: 0,
+            minHeight: 280,
+            backgroundColor: 'white'
           }}
         >
-          <Menu mode="inline" defaultSelectedKeys={['4']}>
-            <Menu.Item key="1" icon={<UserOutlined />}>
-              nav 1
-            </Menu.Item>
-            <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-              nav 2
-            </Menu.Item>
-            <Menu.Item key="3" icon={<UploadOutlined />}>
-              nav 3
-            </Menu.Item>
-            <Menu.Item key="4" icon={<BarChartOutlined />}>
-              nav 4
-            </Menu.Item>
-            <Menu.Item key="5" icon={<CloudOutlined />}>
-              nav 5
-            </Menu.Item>
-            <Menu.Item key="6" icon={<AppstoreOutlined />}>
-              nav 6
-            </Menu.Item>
-            <Menu.Item key="7" icon={<TeamOutlined />}>
-              nav 7
-            </Menu.Item>
-            <Menu.Item key="8" icon={<ShopOutlined />}>
-              nav 8
-            </Menu.Item>
-          </Menu>
-        </Sider>
-        <Layout className="site-layout" style={{ padding: '64px 0 0 200px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item>
-          </Breadcrumb>
-          <Content
-            className="site-layout-background"
-            style={{
-              padding: 24,
-              margin: 0,
-              minHeight: 280,
-              backgroundColor: 'white'
-            }}
-          >
-            <div className="site-layout-background" style={{ padding: 24, textAlign: 'center' }}>
-              <h1>xgplayer的插件机制是如何实现的？</h1>
-              <p>有一些好奇xgplayer是如何实现其插件机制的，官网介绍：</p>
-              <p>初始化new Player之后假设得到一个实例，</p>
-            </div>
-          </Content>
-        </Layout>
+          <div className="site-layout-background" style={{ padding: 24 }}>
+            <Switch>
+              {routes.map((route, index) => (
+                // Render more <Route>s with the same paths as
+                // above, but different components this time.
+                <Route
+                  key={index}
+                  path={route.path}
+                  exact={route.exact}
+                  children={<route.main />}
+                />
+              ))}
+            </Switch>
+          </div>
+        </Content>
       </Layout>
-    );
-  }
+    </Layout>
+  )
+}
+
+const SiderDemo  = () => {
+  // let location = useLocation()
+  // console.log(location)
+  return (
+    <Router>
+      <App />
+    </Router>
+  );
 }
 
 const mountNode = document.getElementById('root')
