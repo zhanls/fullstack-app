@@ -1,44 +1,32 @@
-import React, { useState } from 'react'
-import { Transition } from 'react-transition-group';
-
-const duration = 300;
-
-const defaultStyle = {
-  transition: `opacity ${duration}ms ease-in-out`,
-  opacity: 0,
-}
-
-const transitionStyles = {
-  entering: { opacity: 1 },
-  entered:  { opacity: 1 },
-  exiting:  { opacity: 0 },
-  exited:  { opacity: 0 },
-};
+import React from 'react'
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import './Picture.css'
 
 function Picture() {
-  const [inProp, setInProp] = useState(false);
+  const pictures = [1, 2, 3, 4, 5]
   return (
-    <div>
-      <Transition in={inProp} timeout={duration}>
-        {state => (
-          <img
-            src={require('../assets/img/1.jpg')}
-            alt="song jiang"
-            style={{
-              ...defaultStyle,
-              ...transitionStyles[state]
-            }} 
-          />
-        )}
-      </Transition>
-      <button onClick={() => setInProp(true)}>
-        Click to Enter
-      </button>
-      <button onClick={() => setInProp(false)}>
-        Click to Exit
-      </button>
+    <div className="picture-background">
+      <TransitionGroup className="picture-container">
+        {pictures.map(picture => (
+          <CSSTransition
+            key={picture}
+            timeout={500}
+            className="picture"
+          >
+            <img
+              src={require(`../assets/img/${picture}.jpg`)}
+              alt={picture}
+            />
+          </CSSTransition>
+        ))}
+      </TransitionGroup>
+      <div style={{ textAlign: 'center' }}>
+        <button>
+          Click to do nothing <span role="img" aria-label="xixi">🤭</span>
+        </button>
+      </div>
     </div>
-  );
+  )
 }
 
 export default Picture

@@ -1,0 +1,23 @@
+.picture-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.picture {
+  width: 20%;
+}
+
+.picture-enter {
+  opacity: 0;
+}
+.picture-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+.picture-exit {
+  opacity: 1;
+}
+.picture-exit-active {
+  opacity: 0;
+  transition: opacity 500ms ease-in;
+}
