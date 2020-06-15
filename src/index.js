@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom'
 import {
   BrowserRouter as Router,
@@ -11,13 +11,17 @@ import { Layout, Menu } from 'antd'
 import {
   UserOutlined,
   VideoCameraOutlined,
-} from '@ant-design/icons';
-
-// views
-import Pictures from './views/Pictures'
-import NotFound from './views/NotFound'
-
+} from '@ant-design/icons'
 import './index.css'
+// 手动设置延迟1s加载
+const slowImport = (value, ms = 1000) => {
+  return new Promise(resolve=>{
+      setTimeout(()=> resolve(value), ms);
+  })
+}
+// React.lazy
+const Pictures = React.lazy(() => slowImport(import('./views/Pictures'), 1000))
+const NotFound = React.lazy(() => slowImport(import('./views/NotFound'), 1000))
 
 const { Header, Sider, Content } = Layout;
 
@@ -44,8 +48,8 @@ const App = () => {
     <Layout hasSider>
       <Header className="header">
         <div className="logo">
-          <img src="https://vuejs.org/images/logo.png" alt="vue logo"/>
-          <span>Vue.js</span>
+          <img src={require('./assets/logo/logo.png')} alt="react logo"/>
+          <span>React It</span>
         </div>
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
           <Menu.Item key="1">nav 1</Menu.Item>
@@ -83,18 +87,20 @@ const App = () => {
           }}
         >
           <div className="site-layout-background" style={{ padding: 24 }}>
-            <Switch>
-              {routes.map((route, index) => (
-                // Render more <Route>s with the same paths as
-                // above, but different components this time.
-                <Route
-                  key={index}
-                  path={route.path}
-                  exact={route.exact}
-                  children={<route.main />}
-                />
-              ))}
-            </Switch>
+            <Suspense fallback={<div>slowly import fallback...</div>}>
+              <Switch>
+                {routes.map((route, index) => (
+                  // Render more <Route>s with the same paths as
+                  // above, but different components this time.
+                  <Route
+                    key={index}
+                    path={route.path}
+                    exact={route.exact}
+                    children={<route.main />}
+                  />
+                ))}
+              </Switch>
+            </Suspense>
           </div>
         </Content>
       </Layout>

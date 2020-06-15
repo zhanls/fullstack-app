@@ -7,24 +7,20 @@
 }
 
 .logo {
-  font-size: 1.5em;
-  line-height: 40px;
-  color: #273849;
-  font-family: "Dosis", "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
-  width: 120px;
-  height: 31px;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 16px 28px 16px 0;
   float: left;
+  width: 150px;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .logo img {
-  vertical-align: middle;
   margin-right: 6px;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
 }
 
-/* .site-layout .site-layout-background {
-  background: #fff;
-} */
+.logo span {
+  color: white;
+  font-size: 1.5em;
+}
